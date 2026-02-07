@@ -14,12 +14,15 @@ def search():
     conn = sqlite3.connect("test.db")
     cursor = conn.cursor()
 
-    # Secure version (Prevents SQL Injection)
+    # SECURE: Parameterized query (Prevents SQL Injection)
     cursor.execute("SELECT * FROM users WHERE name = ?", (query,))
     results = cursor.fetchall()
+
+    conn.close()
 
     return f"Results: {results}"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)  # debug disabled for security
+
 
