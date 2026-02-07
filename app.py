@@ -10,11 +10,16 @@ def home():
 @app.route("/search")
 def search():
     query = request.args.get("q")
+
     conn = sqlite3.connect("test.db")
     cursor = conn.cursor()
-    sql = "SELECT * FROM users WHERE name = '" + query + "'"  # SQL Injection
-    cursor.execute(sql)
-    return "Search Complete"
+
+    # Secure version (Prevents SQL Injection)
+    cursor.execute("SELECT * FROM users WHERE name = ?", (query,))
+    results = cursor.fetchall()
+
+    return f"Results: {results}"
 
 if __name__ == "__main__":
     app.run(debug=True)
+
